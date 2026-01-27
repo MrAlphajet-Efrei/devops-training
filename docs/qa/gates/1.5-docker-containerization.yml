@@ -1,0 +1,65 @@
+schema: 1
+story: "1.5"
+story_title: "Docker Containerization"
+gate: CONCERNS
+status_reason: "Both Docker images build and run correctly as non-root, but image sizes significantly exceed AC7 targets (API 288MB vs 200MB target, Frontend 292MB vs 100MB target). Containerization is functionally sound."
+reviewer: "Quinn (Test Architect)"
+updated: "2026-01-27T00:00:00Z"
+
+waiver: { active: false }
+
+top_issues:
+  - id: "SIZE-001"
+    severity: medium
+    finding: "API image is 288MB (target < 200MB, 44% over). psycopg2-binary adds ~50MB; python:3.11-slim base is inherently larger."
+    suggested_action: "Consider distroless base or removing build-essential artifacts more aggressively"
+    suggested_owner: dev
+  - id: "SIZE-002"
+    severity: medium
+    finding: "Frontend image is 292MB (target < 100MB, 192% over). Next.js 16 + React 19 standalone output is significantly larger than Next.js 14."
+    suggested_action: "Consider distroless node base or verify standalone output isn't bundling unnecessary files; alternatively update AC targets"
+    suggested_owner: dev
+
+risk_summary:
+  totals: { critical: 0, high: 0, medium: 2, low: 2 }
+  recommendations:
+    must_fix: []
+    monitor:
+      - "Image sizes should be re-evaluated with updated stack targets"
+      - "Frontend non-root user doesn't use explicit UID 1000"
+
+quality_score: 80
+expires: "2026-02-10T00:00:00Z"
+
+evidence:
+  tests_reviewed: 0
+  risks_identified: 2
+  trace:
+    ac_covered: [1, 2, 4, 5, 6]
+    ac_gaps: [3, 7]
+
+nfr_validation:
+  security:
+    status: PASS
+    notes: "Non-root users, no secrets baked in, slim/alpine bases, telemetry disabled"
+  performance:
+    status: CONCERNS
+    notes: "Image sizes 44-192% over targets; functional but impacts pull/deploy times"
+  reliability:
+    status: PASS
+    notes: "Multi-stage builds, proper entrypoints, standalone mode for frontend"
+  maintainability:
+    status: PASS
+    notes: "Clean Dockerfiles, well-documented build commands, comprehensive .dockerignore"
+
+recommendations:
+  immediate:
+    - action: "Team decision needed: update AC7 size targets to reflect Next.js 16/React 19 reality, or invest in distroless optimization"
+      refs: ["apps/api/Dockerfile", "apps/frontend/Dockerfile"]
+  future:
+    - action: "Consider distroless base images for both services"
+      refs: ["apps/api/Dockerfile", "apps/frontend/Dockerfile"]
+    - action: "Exclude test files from frontend .dockerignore"
+      refs: ["apps/frontend/.dockerignore"]
+    - action: "Set explicit UID for frontend non-root user if AC3 requires it"
+      refs: ["apps/frontend/Dockerfile"]

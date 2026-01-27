@@ -39,6 +39,21 @@ pytest -v --cov=app --cov-report=term-missing
 | `GET`  | `/health` | Liveness probe  | `{"status": "healthy", "timestamp": "..."}` |
 | `GET`  | `/ready`  | Readiness probe | 200 OK or 503 Service Unavailable           |
 
+## Docker
+
+```bash
+# Build
+docker build -t devops-api:0.1.0 .
+
+# Run
+docker run -d -p 8000:8000 devops-api:0.1.0
+
+# Verify
+curl http://localhost:8000/health
+```
+
+The image uses multi-stage builds with `python:3.11-slim` and runs as non-root user `appuser` (UID 1000).
+
 ## Environment Variables
 
 | Variable      | Default     | Description       |

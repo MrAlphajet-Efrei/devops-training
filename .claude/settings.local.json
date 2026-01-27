@@ -8,7 +8,8 @@
       "mcp__github__issue_write",
       "Bash(python -m venv:*)",
       "Bash(.venvScriptsactivate)",
-      "Bash(pip install:*)"
+      "Bash(pip install:*)",
+      "Bash(npm install:*)"
     ]
   }
 }

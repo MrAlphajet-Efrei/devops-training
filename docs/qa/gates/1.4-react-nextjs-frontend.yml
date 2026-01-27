@@ -1,0 +1,58 @@
+schema: 1
+story: "1.4"
+story_title: "React/Next.js Frontend Service"
+gate: CONCERNS
+status_reason: "Frontend type definitions use camelCase (createdAt/updatedAt) but backend serializes snake_case (created_at/updated_at), causing 'Invalid Date' display. Core item listing works but AC2 is partially broken."
+reviewer: "Quinn (Test Architect)"
+updated: "2026-01-27T00:00:00Z"
+
+waiver: { active: false }
+
+top_issues:
+  - id: "DATA-001"
+    severity: high
+    finding: "Frontend Item type uses camelCase fields (createdAt, updatedAt) but FastAPI backend serializes with snake_case (created_at, updated_at). Dates render as 'Invalid Date' on the homepage."
+    suggested_action: "Add response transformer in apiClient, change frontend types to snake_case, or configure FastAPI alias serialization"
+    suggested_owner: dev
+
+risk_summary:
+  totals: { critical: 0, high: 1, medium: 0, low: 3 }
+  recommendations:
+    must_fix:
+      - "Fix camelCase/snake_case field mismatch between frontend types and backend JSON"
+    monitor:
+      - "error.tsx exposes error.message to users"
+
+quality_score: 70
+expires: "2026-02-10T00:00:00Z"
+
+evidence:
+  tests_reviewed: 7
+  risks_identified: 1
+  trace:
+    ac_covered: [1, 3, 4, 5, 6]
+    ac_gaps: [2]
+
+nfr_validation:
+  security:
+    status: PASS
+    notes: "No secrets in client code, env-based API URL configuration"
+  performance:
+    status: PASS
+    notes: "SWR caching, standalone build, React Compiler enabled"
+  reliability:
+    status: CONCERNS
+    notes: "camelCase/snake_case mismatch causes date fields to be undefined at runtime"
+  maintainability:
+    status: PASS
+    notes: "Clean component hierarchy, TypeScript strict, proper service layer abstraction"
+
+recommendations:
+  immediate:
+    - action: "Fix Item type field names to match backend JSON (snake_case) or add a response mapper"
+      refs: ["apps/frontend/src/types/item.ts", "apps/frontend/src/services/api.ts"]
+  future:
+    - action: "Consider sanitizing error.message in error.tsx for production"
+      refs: ["apps/frontend/src/app/error.tsx"]
+    - action: "Exclude __tests__/ from .dockerignore"
+      refs: ["apps/frontend/.dockerignore"]
