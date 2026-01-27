@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(for dir in apps/frontend apps/api infra/terraform/environments/dev infra/terraform/environments/prod infra/terraform/modules infra/helm/charts infra/helm/environments infra/kind infra/grafana/dashboards .github/workflows scripts)",
+      "Bash(do touch \"$dir/.gitkeep\")",
+      "Bash(done)"
+    ]
+  }
+}

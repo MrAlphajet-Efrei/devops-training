@@ -1,0 +1,29 @@
+# EditorConfig - Consistent formatting across editors
+# https://editorconfig.org
+
+root = true
+
+# Default settings for all files
+[*]
+indent_style = space
+indent_size = 2
+charset = utf-8
+end_of_line = lf
+trim_trailing_whitespace = true
+insert_final_newline = true
+
+# Python - PEP 8 standard
+[*.py]
+indent_size = 4
+
+# YAML files
+[*.{yaml,yml}]
+indent_size = 2
+
+# Makefiles require tabs
+[Makefile]
+indent_style = tab
+
+# Markdown - trailing whitespace can be intentional
+[*.md]
+trim_trailing_whitespace = false
