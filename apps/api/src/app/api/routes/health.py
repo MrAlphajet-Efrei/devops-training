@@ -1,9 +1,9 @@
-import socket
 from datetime import datetime, timezone
 
 from fastapi import APIRouter, Response, status
+from sqlalchemy import text
 
-from app.config import settings
+from app.db.session import engine
 from app.models.health import HealthResponse
 
 router = APIRouter(tags=["health"])
@@ -25,10 +25,8 @@ async def ready(response: Response) -> HealthResponse:
 
 def _check_db_connectivity() -> bool:
     try:
-        sock = socket.create_connection(
-            (settings.db_host, settings.db_port), timeout=2
-        )
-        sock.close()
+        with engine.connect() as conn:
+            conn.execute(text("SELECT 1"))
         return True
-    except OSError:
+    except Exception:
         return False

@@ -1,0 +1,31 @@
+-- Enable UUID extension
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
+-- Items table
+CREATE TABLE items (
+    id              UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    name            VARCHAR(255) NOT NULL,
+    description     TEXT,
+    created_at      TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW(),
+    updated_at      TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW(),
+    CONSTRAINT items_name_not_empty CHECK (LENGTH(TRIM(name)) > 0)
+);
+
+-- Indexes
+CREATE INDEX idx_items_created_at ON items (created_at DESC);
+CREATE INDEX idx_items_name ON items (name);
+
+-- Auto-update trigger function
+CREATE OR REPLACE FUNCTION update_updated_at_column()
+RETURNS TRIGGER AS $$
+BEGIN
+    NEW.updated_at = NOW();
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Trigger for items table
+CREATE TRIGGER trigger_items_updated_at
+    BEFORE UPDATE ON items
+    FOR EACH ROW
+    EXECUTE FUNCTION update_updated_at_column();
