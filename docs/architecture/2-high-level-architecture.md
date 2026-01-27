@@ -10,18 +10,20 @@ The architecture prioritizes **local-first development** with Kind clusters, whi
 
 **Selected Platform:** Azure (Hybrid Local/Cloud)
 
-| Platform | Pros | Cons | Fit for Project |
-|----------|------|------|-----------------|
-| **Azure (Hybrid Local/Cloud)** | Free tier + $200 credits, ACR/Key Vault included, AKS for validation | Learning curve for Azure-specific services | ✅ **RECOMMENDED** |
-| **AWS** | Mature ecosystem, EKS well-documented | No free credits context | ❌ Not aligned |
-| **Local Only (Kind)** | Zero cost, full control | Misses cloud provider experience | ❌ Incomplete learning |
+| Platform                       | Pros                                                                 | Cons                                       | Fit for Project        |
+| ------------------------------ | -------------------------------------------------------------------- | ------------------------------------------ | ---------------------- |
+| **Azure (Hybrid Local/Cloud)** | Free tier + $200 credits, ACR/Key Vault included, AKS for validation | Learning curve for Azure-specific services | ✅ **RECOMMENDED**     |
+| **AWS**                        | Mature ecosystem, EKS well-documented                                | No free credits context                    | ❌ Not aligned         |
+| **Local Only (Kind)**          | Zero cost, full control                                              | Misses cloud provider experience           | ❌ Incomplete learning |
 
 **Key Services:**
+
 - **Local:** Kind (Kubernetes), Docker Desktop
 - **Azure:** ACR (Container Registry), Key Vault (Secrets), Storage Account (Terraform state), AKS (bonus)
 - **CI/CD:** GitHub Actions
 
 **Deployment Regions:**
+
 - Local: Kind cluster on development machine
 - Azure: West Europe (or nearest region with free tier availability)
 
@@ -30,6 +32,7 @@ The architecture prioritizes **local-first development** with Kind clusters, whi
 **Structure:** Monorepo (single repository)
 
 **Rationale:**
+
 - Simplifies CI/CD pipeline configuration (single trigger point)
 - Easier atomic commits across app + infrastructure changes
 - Appropriate for learning project (all context in one place)
@@ -106,16 +109,16 @@ graph TB
 
 ## 2.5 Architectural Patterns
 
-| Pattern | Description | Rationale |
-|---------|-------------|-----------|
-| **Containerized Microservices** | Each component runs in isolated containers | Standard cloud-native pattern, enables independent scaling |
-| **3-Tier Architecture** | Presentation → Business Logic → Data | Clear separation of concerns, industry standard |
-| **Infrastructure as Code** | All infra defined in Terraform | Reproducibility, version control, GitOps foundation |
-| **Declarative Deployment** | Helm charts with Helmfile orchestration | Environment-specific config, rollback capability |
-| **GitOps-Adjacent CI/CD** | GitHub Actions triggers deployments | Pipeline as code, full automation |
-| **Observability-First** | Metrics (Prometheus) + Logs (Loki) from day 1 | Critical for MLOps, enables proactive monitoring |
-| **Progressive Secrets Management** | K8s Secrets → Azure Key Vault migration | Learn fundamentals first, then enterprise patterns |
-| **API Gateway Pattern** | NGINX Ingress as single entry point | Centralized TLS termination, routing |
-| **Health Check Pattern** | Liveness + Readiness probes on API | K8s best practice, enables self-healing |
+| Pattern                            | Description                                   | Rationale                                                  |
+| ---------------------------------- | --------------------------------------------- | ---------------------------------------------------------- |
+| **Containerized Microservices**    | Each component runs in isolated containers    | Standard cloud-native pattern, enables independent scaling |
+| **3-Tier Architecture**            | Presentation → Business Logic → Data          | Clear separation of concerns, industry standard            |
+| **Infrastructure as Code**         | All infra defined in Terraform                | Reproducibility, version control, GitOps foundation        |
+| **Declarative Deployment**         | Helm charts with Helmfile orchestration       | Environment-specific config, rollback capability           |
+| **GitOps-Adjacent CI/CD**          | GitHub Actions triggers deployments           | Pipeline as code, full automation                          |
+| **Observability-First**            | Metrics (Prometheus) + Logs (Loki) from day 1 | Critical for MLOps, enables proactive monitoring           |
+| **Progressive Secrets Management** | K8s Secrets → Azure Key Vault migration       | Learn fundamentals first, then enterprise patterns         |
+| **API Gateway Pattern**            | NGINX Ingress as single entry point           | Centralized TLS termination, routing                       |
+| **Health Check Pattern**           | Liveness + Readiness probes on API            | K8s best practice, enables self-healing                    |
 
 ---

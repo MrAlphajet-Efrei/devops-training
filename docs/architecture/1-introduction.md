@@ -12,8 +12,8 @@ This is a new project built from scratch as a learning exercise. No starter temp
 
 ## 1.2 Change Log
 
-| Date | Version | Description | Author |
-|------|---------|-------------|--------|
-| 2026-01-26 | 1.0 | Initial architecture document | Architect Winston |
+| Date       | Version | Description                   | Author            |
+| ---------- | ------- | ----------------------------- | ----------------- |
+| 2026-01-26 | 1.0     | Initial architecture document | Architect Winston |
 
 ---

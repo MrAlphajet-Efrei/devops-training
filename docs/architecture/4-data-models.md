@@ -6,13 +6,13 @@ The data model is intentionally **minimal** as the application serves as a vehic
 
 **Purpose:** Core business entity demonstrating full CRUD operations through the API, database persistence, and frontend display.
 
-| Attribute | Type | Description |
-|-----------|------|-------------|
-| `id` | UUID | Unique identifier, auto-generated |
-| `name` | string | Item name, required, max 255 chars |
-| `description` | string | Optional item description |
-| `created_at` | timestamp | Auto-set on creation |
-| `updated_at` | timestamp | Auto-updated on modification |
+| Attribute     | Type      | Description                        |
+| ------------- | --------- | ---------------------------------- |
+| `id`          | UUID      | Unique identifier, auto-generated  |
+| `name`        | string    | Item name, required, max 255 chars |
+| `description` | string    | Optional item description          |
+| `created_at`  | timestamp | Auto-set on creation               |
+| `updated_at`  | timestamp | Auto-updated on modification       |
 
 ### TypeScript Interface
 
@@ -76,14 +76,14 @@ class Item(ItemBase):
 
 ```typescript
 export interface HealthResponse {
-  status: 'healthy' | 'unhealthy';
+  status: "healthy" | "unhealthy";
   timestamp: Date;
 }
 
 export interface ReadinessResponse {
-  status: 'ready' | 'not_ready';
+  status: "ready" | "not_ready";
   checks: {
-    database: 'ok' | 'error';
+    database: "ok" | "error";
   };
   timestamp: Date;
 }

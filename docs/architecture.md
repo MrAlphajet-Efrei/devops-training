@@ -46,9 +46,9 @@ This is a new project built from scratch as a learning exercise. No starter temp
 
 ### 1.2 Change Log
 
-| Date | Version | Description | Author |
-|------|---------|-------------|--------|
-| 2026-01-26 | 1.0 | Initial architecture document | Architect Winston |
+| Date       | Version | Description                   | Author            |
+| ---------- | ------- | ----------------------------- | ----------------- |
+| 2026-01-26 | 1.0     | Initial architecture document | Architect Winston |
 
 ---
 
@@ -64,18 +64,20 @@ The architecture prioritizes **local-first development** with Kind clusters, whi
 
 **Selected Platform:** Azure (Hybrid Local/Cloud)
 
-| Platform | Pros | Cons | Fit for Project |
-|----------|------|------|-----------------|
-| **Azure (Hybrid Local/Cloud)** | Free tier + $200 credits, ACR/Key Vault included, AKS for validation | Learning curve for Azure-specific services | ✅ **RECOMMENDED** |
-| **AWS** | Mature ecosystem, EKS well-documented | No free credits context | ❌ Not aligned |
-| **Local Only (Kind)** | Zero cost, full control | Misses cloud provider experience | ❌ Incomplete learning |
+| Platform                       | Pros                                                                 | Cons                                       | Fit for Project        |
+| ------------------------------ | -------------------------------------------------------------------- | ------------------------------------------ | ---------------------- |
+| **Azure (Hybrid Local/Cloud)** | Free tier + $200 credits, ACR/Key Vault included, AKS for validation | Learning curve for Azure-specific services | ✅ **RECOMMENDED**     |
+| **AWS**                        | Mature ecosystem, EKS well-documented                                | No free credits context                    | ❌ Not aligned         |
+| **Local Only (Kind)**          | Zero cost, full control                                              | Misses cloud provider experience           | ❌ Incomplete learning |
 
 **Key Services:**
+
 - **Local:** Kind (Kubernetes), Docker Desktop
 - **Azure:** ACR (Container Registry), Key Vault (Secrets), Storage Account (Terraform state), AKS (bonus)
 - **CI/CD:** GitHub Actions
 
 **Deployment Regions:**
+
 - Local: Kind cluster on development machine
 - Azure: West Europe (or nearest region with free tier availability)
 
@@ -84,6 +86,7 @@ The architecture prioritizes **local-first development** with Kind clusters, whi
 **Structure:** Monorepo (single repository)
 
 **Rationale:**
+
 - Simplifies CI/CD pipeline configuration (single trigger point)
 - Easier atomic commits across app + infrastructure changes
 - Appropriate for learning project (all context in one place)
@@ -160,17 +163,17 @@ graph TB
 
 ### 2.5 Architectural Patterns
 
-| Pattern | Description | Rationale |
-|---------|-------------|-----------|
-| **Containerized Microservices** | Each component runs in isolated containers | Standard cloud-native pattern, enables independent scaling |
-| **3-Tier Architecture** | Presentation → Business Logic → Data | Clear separation of concerns, industry standard |
-| **Infrastructure as Code** | All infra defined in Terraform | Reproducibility, version control, GitOps foundation |
-| **Declarative Deployment** | Helm charts with Helmfile orchestration | Environment-specific config, rollback capability |
-| **GitOps-Adjacent CI/CD** | GitHub Actions triggers deployments | Pipeline as code, full automation |
-| **Observability-First** | Metrics (Prometheus) + Logs (Loki) from day 1 | Critical for MLOps, enables proactive monitoring |
-| **Progressive Secrets Management** | K8s Secrets → Azure Key Vault migration | Learn fundamentals first, then enterprise patterns |
-| **API Gateway Pattern** | NGINX Ingress as single entry point | Centralized TLS termination, routing |
-| **Health Check Pattern** | Liveness + Readiness probes on API | K8s best practice, enables self-healing |
+| Pattern                            | Description                                   | Rationale                                                  |
+| ---------------------------------- | --------------------------------------------- | ---------------------------------------------------------- |
+| **Containerized Microservices**    | Each component runs in isolated containers    | Standard cloud-native pattern, enables independent scaling |
+| **3-Tier Architecture**            | Presentation → Business Logic → Data          | Clear separation of concerns, industry standard            |
+| **Infrastructure as Code**         | All infra defined in Terraform                | Reproducibility, version control, GitOps foundation        |
+| **Declarative Deployment**         | Helm charts with Helmfile orchestration       | Environment-specific config, rollback capability           |
+| **GitOps-Adjacent CI/CD**          | GitHub Actions triggers deployments           | Pipeline as code, full automation                          |
+| **Observability-First**            | Metrics (Prometheus) + Logs (Loki) from day 1 | Critical for MLOps, enables proactive monitoring           |
+| **Progressive Secrets Management** | K8s Secrets → Azure Key Vault migration       | Learn fundamentals first, then enterprise patterns         |
+| **API Gateway Pattern**            | NGINX Ingress as single entry point           | Centralized TLS termination, routing                       |
+| **Health Check Pattern**           | Liveness + Readiness probes on API            | K8s best practice, enables self-healing                    |
 
 ---
 
@@ -178,32 +181,32 @@ graph TB
 
 This is the **DEFINITIVE** technology selection for the entire project. All development must use these exact technologies and versions.
 
-| Category | Technology | Version | Purpose | Rationale |
-|----------|------------|---------|---------|-----------|
-| **Frontend Language** | TypeScript | 5.x | Type-safe frontend development | Industry standard, catches errors at compile time |
-| **Frontend Framework** | Next.js | 14.x | React framework with SSR/SSG | Modern React patterns, easy deployment |
-| **UI Component Library** | Tailwind CSS | 3.x | Utility-first styling | Rapid prototyping, minimal CSS overhead |
-| **State Management** | React Context + SWR | 2.x | Client state + data fetching | Lightweight, SWR handles API caching |
-| **Backend Language** | Python | 3.11+ | API development | MLOps pathway, FastAPI ecosystem |
-| **Backend Framework** | FastAPI | 0.109+ | REST API framework | Async-native, auto OpenAPI docs |
-| **API Style** | REST | OpenAPI 3.0 | API communication | Simple, well-understood |
-| **Database** | PostgreSQL | 15.x | Relational data storage | Robust, SQL standard, excellent K8s support |
-| **Cache** | None (MVP) | - | - | Out of scope for learning project |
-| **Authentication** | None (MVP) | - | - | Out of scope per PRD |
-| **Frontend Testing** | Jest + React Testing Library | 29.x / 14.x | Unit & component tests | Standard React testing stack |
-| **Backend Testing** | pytest + httpx | 7.x / 0.26+ | Unit & integration tests | Python standard, async support |
-| **E2E Testing** | curl/httpie (smoke tests) | - | Pipeline validation | Lightweight, sufficient for scope |
-| **IaC Tool** | Terraform | 1.5+ | Infrastructure provisioning | Industry standard, Azure provider |
-| **CI/CD** | GitHub Actions | - | Pipeline automation | Native GitHub integration, free |
-| **Container Runtime** | Docker | 24.x | Container builds | Industry standard, multi-stage builds |
-| **Container Orchestration** | Kubernetes (Kind/AKS) | 1.28+ | Container orchestration | Learning target, production standard |
-| **Package Manager (K8s)** | Helm + Helmfile | 3.x / 0.158+ | K8s app packaging | Declarative, environment-specific values |
-| **Monitoring** | Prometheus + Grafana | kube-prometheus-stack | Metrics collection & visualization | MLOps foundation, industry standard |
-| **Logging** | Loki + Promtail | loki-stack | Log aggregation | Grafana ecosystem, lightweight |
-| **Ingress Controller** | NGINX Ingress | 4.x | Traffic routing | Most common, well-documented |
-| **Certificate Management** | cert-manager | 1.13+ | TLS automation | K8s native, Let's Encrypt integration |
-| **Secrets (Phase 1)** | Kubernetes Secrets | native | Basic secret storage | Learn fundamentals first |
-| **Secrets (Phase 2)** | Azure Key Vault + CSI Driver | - | Enterprise secrets | Production pattern |
+| Category                    | Technology                   | Version               | Purpose                            | Rationale                                         |
+| --------------------------- | ---------------------------- | --------------------- | ---------------------------------- | ------------------------------------------------- |
+| **Frontend Language**       | TypeScript                   | 5.x                   | Type-safe frontend development     | Industry standard, catches errors at compile time |
+| **Frontend Framework**      | Next.js                      | 14.x                  | React framework with SSR/SSG       | Modern React patterns, easy deployment            |
+| **UI Component Library**    | Tailwind CSS                 | 3.x                   | Utility-first styling              | Rapid prototyping, minimal CSS overhead           |
+| **State Management**        | React Context + SWR          | 2.x                   | Client state + data fetching       | Lightweight, SWR handles API caching              |
+| **Backend Language**        | Python                       | 3.11+                 | API development                    | MLOps pathway, FastAPI ecosystem                  |
+| **Backend Framework**       | FastAPI                      | 0.109+                | REST API framework                 | Async-native, auto OpenAPI docs                   |
+| **API Style**               | REST                         | OpenAPI 3.0           | API communication                  | Simple, well-understood                           |
+| **Database**                | PostgreSQL                   | 15.x                  | Relational data storage            | Robust, SQL standard, excellent K8s support       |
+| **Cache**                   | None (MVP)                   | -                     | -                                  | Out of scope for learning project                 |
+| **Authentication**          | None (MVP)                   | -                     | -                                  | Out of scope per PRD                              |
+| **Frontend Testing**        | Jest + React Testing Library | 29.x / 14.x           | Unit & component tests             | Standard React testing stack                      |
+| **Backend Testing**         | pytest + httpx               | 7.x / 0.26+           | Unit & integration tests           | Python standard, async support                    |
+| **E2E Testing**             | curl/httpie (smoke tests)    | -                     | Pipeline validation                | Lightweight, sufficient for scope                 |
+| **IaC Tool**                | Terraform                    | 1.5+                  | Infrastructure provisioning        | Industry standard, Azure provider                 |
+| **CI/CD**                   | GitHub Actions               | -                     | Pipeline automation                | Native GitHub integration, free                   |
+| **Container Runtime**       | Docker                       | 24.x                  | Container builds                   | Industry standard, multi-stage builds             |
+| **Container Orchestration** | Kubernetes (Kind/AKS)        | 1.28+                 | Container orchestration            | Learning target, production standard              |
+| **Package Manager (K8s)**   | Helm + Helmfile              | 3.x / 0.158+          | K8s app packaging                  | Declarative, environment-specific values          |
+| **Monitoring**              | Prometheus + Grafana         | kube-prometheus-stack | Metrics collection & visualization | MLOps foundation, industry standard               |
+| **Logging**                 | Loki + Promtail              | loki-stack            | Log aggregation                    | Grafana ecosystem, lightweight                    |
+| **Ingress Controller**      | NGINX Ingress                | 4.x                   | Traffic routing                    | Most common, well-documented                      |
+| **Certificate Management**  | cert-manager                 | 1.13+                 | TLS automation                     | K8s native, Let's Encrypt integration             |
+| **Secrets (Phase 1)**       | Kubernetes Secrets           | native                | Basic secret storage               | Learn fundamentals first                          |
+| **Secrets (Phase 2)**       | Azure Key Vault + CSI Driver | -                     | Enterprise secrets                 | Production pattern                                |
 
 ---
 
@@ -215,13 +218,13 @@ The data model is intentionally **minimal** as the application serves as a vehic
 
 **Purpose:** Core business entity demonstrating full CRUD operations through the API, database persistence, and frontend display.
 
-| Attribute | Type | Description |
-|-----------|------|-------------|
-| `id` | UUID | Unique identifier, auto-generated |
-| `name` | string | Item name, required, max 255 chars |
-| `description` | string | Optional item description |
-| `created_at` | timestamp | Auto-set on creation |
-| `updated_at` | timestamp | Auto-updated on modification |
+| Attribute     | Type      | Description                        |
+| ------------- | --------- | ---------------------------------- |
+| `id`          | UUID      | Unique identifier, auto-generated  |
+| `name`        | string    | Item name, required, max 255 chars |
+| `description` | string    | Optional item description          |
+| `created_at`  | timestamp | Auto-set on creation               |
+| `updated_at`  | timestamp | Auto-updated on modification       |
 
 #### TypeScript Interface
 
@@ -285,14 +288,14 @@ class Item(ItemBase):
 
 ```typescript
 export interface HealthResponse {
-  status: 'healthy' | 'unhealthy';
+  status: "healthy" | "unhealthy";
   timestamp: Date;
 }
 
 export interface ReadinessResponse {
-  status: 'ready' | 'not_ready';
+  status: "ready" | "not_ready";
   checks: {
-    database: 'ok' | 'error';
+    database: "ok" | "error";
   };
   timestamp: Date;
 }
@@ -336,21 +339,21 @@ paths:
       tags: [Health]
       summary: Liveness probe
       responses:
-        '200':
+        "200":
           description: API is alive
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/HealthResponse'
+                $ref: "#/components/schemas/HealthResponse"
 
   /ready:
     get:
       tags: [Health]
       summary: Readiness probe
       responses:
-        '200':
+        "200":
           description: API is ready
-        '503':
+        "503":
           description: API is not ready
 
   /items:
@@ -369,12 +372,12 @@ paths:
             type: integer
             default: 0
       responses:
-        '200':
+        "200":
           description: List of items
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ItemListResponse'
+                $ref: "#/components/schemas/ItemListResponse"
 
     post:
       tags: [Items]
@@ -384,11 +387,11 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateItemRequest'
+              $ref: "#/components/schemas/CreateItemRequest"
       responses:
-        '201':
+        "201":
           description: Item created
-        '422':
+        "422":
           description: Validation error
 
   /items/{item_id}:
@@ -403,27 +406,27 @@ paths:
             type: string
             format: uuid
       responses:
-        '200':
+        "200":
           description: Item found
-        '404':
+        "404":
           description: Item not found
 
     put:
       tags: [Items]
       summary: Update an item
       responses:
-        '200':
+        "200":
           description: Item updated
-        '404':
+        "404":
           description: Item not found
 
     delete:
       tags: [Items]
       summary: Delete an item
       responses:
-        '204':
+        "204":
           description: Item deleted
-        '404':
+        "404":
           description: Item not found
 
   /metrics:
@@ -431,7 +434,7 @@ paths:
       tags: [Metrics]
       summary: Prometheus metrics (internal only)
       responses:
-        '200':
+        "200":
           description: Prometheus format metrics
 
 components:
@@ -479,24 +482,24 @@ components:
         items:
           type: array
           items:
-            $ref: '#/components/schemas/Item'
+            $ref: "#/components/schemas/Item"
         total:
           type: integer
 ```
 
 ### 5.2 API Endpoints Summary
 
-| Method | Path | Purpose | Auth |
-|--------|------|---------|------|
-| `GET` | `/health` | Liveness probe | No |
-| `GET` | `/ready` | Readiness probe | No |
-| `GET` | `/items` | List items | No |
-| `POST` | `/items` | Create item | No |
-| `GET` | `/items/{id}` | Get single item | No |
-| `PUT` | `/items/{id}` | Update item | No |
-| `DELETE` | `/items/{id}` | Delete item | No |
-| `GET` | `/metrics` | Prometheus metrics | No |
-| `GET` | `/docs` | Swagger UI | No |
+| Method   | Path          | Purpose            | Auth |
+| -------- | ------------- | ------------------ | ---- |
+| `GET`    | `/health`     | Liveness probe     | No   |
+| `GET`    | `/ready`      | Readiness probe    | No   |
+| `GET`    | `/items`      | List items         | No   |
+| `POST`   | `/items`      | Create item        | No   |
+| `GET`    | `/items/{id}` | Get single item    | No   |
+| `PUT`    | `/items/{id}` | Update item        | No   |
+| `DELETE` | `/items/{id}` | Delete item        | No   |
+| `GET`    | `/metrics`    | Prometheus metrics | No   |
+| `GET`    | `/docs`       | Swagger UI         | No   |
 
 ---
 
@@ -504,28 +507,28 @@ components:
 
 ### 6.1 Application Components
 
-| Component | Responsibility | Technology | K8s Resources |
-|-----------|----------------|------------|---------------|
-| **Frontend** | Web UI, data display | Next.js 14 | Deployment, Service, ConfigMap |
-| **API** | Business logic, REST endpoints | FastAPI | Deployment, Service, ConfigMap, Secret, ServiceMonitor |
-| **PostgreSQL** | Data persistence | PostgreSQL 15 | StatefulSet, Service, PVC, Secret |
+| Component      | Responsibility                 | Technology    | K8s Resources                                          |
+| -------------- | ------------------------------ | ------------- | ------------------------------------------------------ |
+| **Frontend**   | Web UI, data display           | Next.js 15    | Deployment, Service, ConfigMap                         |
+| **API**        | Business logic, REST endpoints | FastAPI       | Deployment, Service, ConfigMap, Secret, ServiceMonitor |
+| **PostgreSQL** | Data persistence               | PostgreSQL 15 | StatefulSet, Service, PVC, Secret                      |
 
 ### 6.2 Infrastructure Components
 
-| Component | Responsibility | Technology |
-|-----------|----------------|------------|
+| Component         | Responsibility                   | Technology               |
+| ----------------- | -------------------------------- | ------------------------ |
 | **NGINX Ingress** | Traffic routing, TLS termination | ingress-nginx Helm chart |
-| **cert-manager** | TLS certificate automation | cert-manager Helm chart |
-| **CSI Driver** | Azure Key Vault secret mounting | secrets-store-csi-driver |
+| **cert-manager**  | TLS certificate automation       | cert-manager Helm chart  |
+| **CSI Driver**    | Azure Key Vault secret mounting  | secrets-store-csi-driver |
 
 ### 6.3 Observability Components
 
-| Component | Responsibility | Technology |
-|-----------|----------------|------------|
+| Component      | Responsibility     | Technology            |
+| -------------- | ------------------ | --------------------- |
 | **Prometheus** | Metrics collection | kube-prometheus-stack |
-| **Grafana** | Visualization | kube-prometheus-stack |
-| **Loki** | Log aggregation | loki-stack |
-| **Promtail** | Log collection | loki-stack |
+| **Grafana**    | Visualization      | kube-prometheus-stack |
+| **Loki**       | Log aggregation    | loki-stack            |
+| **Promtail**   | Log collection     | loki-stack            |
 
 ### 6.4 Component Diagram
 
@@ -558,15 +561,15 @@ C4Context
 
 ## 7. External APIs
 
-| Service | Purpose | Auth Method | Used By |
-|---------|---------|-------------|---------|
-| **Azure ACR** | Container images | Service Principal | GitHub Actions, K8s |
-| **Azure Key Vault** | Secrets storage | Service Principal / CSI | API pods |
-| **Azure Storage** | Terraform state | Service Principal | Terraform |
-| **Azure ARM** | Resource provisioning | Service Principal | Terraform |
-| **Let's Encrypt** | TLS certificates | ACME account | cert-manager |
-| **GitHub API** | CI/CD automation | GITHUB_TOKEN | GitHub Actions |
-| **Docker Hub** | Base images | Anonymous | Docker builds |
+| Service             | Purpose               | Auth Method             | Used By             |
+| ------------------- | --------------------- | ----------------------- | ------------------- |
+| **Azure ACR**       | Container images      | Service Principal       | GitHub Actions, K8s |
+| **Azure Key Vault** | Secrets storage       | Service Principal / CSI | API pods            |
+| **Azure Storage**   | Terraform state       | Service Principal       | Terraform           |
+| **Azure ARM**       | Resource provisioning | Service Principal       | Terraform           |
+| **Let's Encrypt**   | TLS certificates      | ACME account            | cert-manager        |
+| **GitHub API**      | CI/CD automation      | GITHUB_TOKEN            | GitHub Actions      |
+| **Docker Hub**      | Base images           | Anonymous               | Docker builds       |
 
 ### 7.1 Azure Container Registry
 
@@ -773,14 +776,17 @@ apps/frontend/src/
 
 ```typescript
 // src/services/api.ts
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || '/api';
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "/api";
 
-export async function apiClient<T>(endpoint: string, options: RequestInit = {}): Promise<T> {
+export async function apiClient<T>(
+  endpoint: string,
+  options: RequestInit = {},
+): Promise<T> {
   const response = await fetch(`${API_BASE_URL}${endpoint}`, {
-    headers: { 'Content-Type': 'application/json', ...options.headers },
+    headers: { "Content-Type": "application/json", ...options.headers },
     ...options,
   });
-  if (!response.ok) throw new Error('API error');
+  if (!response.ok) throw new Error("API error");
   return response.json();
 }
 ```
@@ -789,11 +795,13 @@ export async function apiClient<T>(endpoint: string, options: RequestInit = {}):
 
 ```typescript
 // src/hooks/useItems.ts
-import useSWR from 'swr';
-import { itemsService } from '@/services/items';
+import useSWR from "swr";
+import { itemsService } from "@/services/items";
 
 export function useItems() {
-  const { data, error, isLoading, mutate } = useSWR('/items', () => itemsService.list());
+  const { data, error, isLoading, mutate } = useSWR("/items", () =>
+    itemsService.list(),
+  );
   return {
     items: data?.items ?? [],
     total: data?.total ?? 0,
@@ -1054,18 +1062,18 @@ ARM_TENANT_ID=
 
 ### 14.1 Deployment Strategy
 
-| Component | Platform | Build Command | Output |
-|-----------|----------|---------------|--------|
-| Frontend | K8s (Kind/AKS) | `npm run build` | `.next/standalone` |
-| API | K8s (Kind/AKS) | Docker build | Container image |
+| Component | Platform       | Build Command   | Output             |
+| --------- | -------------- | --------------- | ------------------ |
+| Frontend  | K8s (Kind/AKS) | `npm run build` | `.next/standalone` |
+| API       | K8s (Kind/AKS) | Docker build    | Container image    |
 
 ### 14.2 Environments
 
-| Environment | Frontend URL | API URL | Purpose |
-|-------------|--------------|---------|---------|
-| Development | `localhost:3000` | `localhost:8000` | Local docker-compose |
-| Kind | `app.local` | `api.local` | Local K8s |
-| Production | `app.example.com` | `api.example.com` | Live |
+| Environment | Frontend URL      | API URL           | Purpose              |
+| ----------- | ----------------- | ----------------- | -------------------- |
+| Development | `localhost:3000`  | `localhost:8000`  | Local docker-compose |
+| Kind        | `app.local`       | `api.local`       | Local K8s            |
+| Production  | `app.example.com` | `api.example.com` | Live                 |
 
 ### 14.3 CI/CD Pipeline
 
@@ -1084,28 +1092,31 @@ ARM_TENANT_ID=
 ### 15.1 Security Requirements
 
 **Container Security:**
+
 - Run as non-root (UID 1000)
 - Read-only root filesystem
 - Drop all capabilities
 - No privilege escalation
 
 **API Security:**
+
 - Input validation via Pydantic
 - CORS whitelist
 - Rate limiting via Ingress
 
 **Secrets:**
+
 - Never in code/config
 - K8s Secrets (Phase 1)
 - Azure Key Vault (Phase 2)
 
 ### 15.2 Performance Targets
 
-| Metric | Target |
-|--------|--------|
-| API p95 latency | < 200ms |
-| Frontend bundle | < 100KB |
-| Container startup | < 30s |
+| Metric            | Target  |
+| ----------------- | ------- |
+| API p95 latency   | < 200ms |
+| Frontend bundle   | < 100KB |
+| Container startup | < 30s   |
 
 ### 15.3 Resource Limits
 
@@ -1127,11 +1138,11 @@ resources:
 
 ### 16.1 Testing Pyramid
 
-| Level | Coverage | Tools |
-|-------|----------|-------|
-| Unit | 70% | Jest, pytest |
-| Integration | 25% | pytest + test DB |
-| E2E | 5% | curl smoke tests |
+| Level       | Coverage | Tools            |
+| ----------- | -------- | ---------------- |
+| Unit        | 70%      | Jest, pytest     |
+| Integration | 25%      | pytest + test DB |
+| E2E         | 5%       | curl smoke tests |
 
 ### 16.2 Running Tests
 
@@ -1149,6 +1160,7 @@ cd apps/frontend && npm test
 ### 16.3 Test Examples
 
 **Backend:**
+
 ```python
 @pytest.mark.asyncio
 async def test_create_item(client: AsyncClient):
@@ -1158,6 +1170,7 @@ async def test_create_item(client: AsyncClient):
 ```
 
 **Frontend:**
+
 ```typescript
 it('renders item name', () => {
   render(<ItemCard item={mockItem} />);
@@ -1171,24 +1184,24 @@ it('renders item name', () => {
 
 ### 17.1 Critical Rules
 
-| Rule | Description |
-|------|-------------|
-| **Type Safety** | TypeScript strict mode; Pydantic for API I/O |
-| **API Calls** | Use service layer, never direct fetch in components |
-| **Environment Variables** | Access through config objects only |
-| **Error Handling** | Global handlers; consistent error format |
-| **Secrets** | Never hardcode; always from environment |
-| **Logging** | Structured JSON; include request_id |
+| Rule                      | Description                                         |
+| ------------------------- | --------------------------------------------------- |
+| **Type Safety**           | TypeScript strict mode; Pydantic for API I/O        |
+| **API Calls**             | Use service layer, never direct fetch in components |
+| **Environment Variables** | Access through config objects only                  |
+| **Error Handling**        | Global handlers; consistent error format            |
+| **Secrets**               | Never hardcode; always from environment             |
+| **Logging**               | Structured JSON; include request_id                 |
 
 ### 17.2 Naming Conventions
 
-| Element | Frontend | Backend |
-|---------|----------|---------|
-| Components | PascalCase | - |
-| Hooks | camelCase (`use*`) | - |
-| API Routes | - | kebab-case |
-| DB Tables | - | snake_case |
-| Env Vars | SCREAMING_SNAKE | SCREAMING_SNAKE |
+| Element    | Frontend           | Backend         |
+| ---------- | ------------------ | --------------- |
+| Components | PascalCase         | -               |
+| Hooks      | camelCase (`use*`) | -               |
+| API Routes | -                  | kebab-case      |
+| DB Tables  | -                  | snake_case      |
+| Env Vars   | SCREAMING_SNAKE    | SCREAMING_SNAKE |
 
 ---
 
@@ -1199,27 +1212,27 @@ it('renders item name', () => {
 ```typescript
 interface ApiError {
   error: {
-    code: string;        // "VALIDATION_ERROR", "NOT_FOUND"
-    message: string;     // Human-readable
-    details?: object;    // Additional context
-    timestamp: string;   // ISO 8601
-    requestId: string;   // For log correlation
+    code: string; // "VALIDATION_ERROR", "NOT_FOUND"
+    message: string; // Human-readable
+    details?: object; // Additional context
+    timestamp: string; // ISO 8601
+    requestId: string; // For log correlation
   };
 }
 ```
 
 ### 18.2 HTTP Status Codes
 
-| Status | Usage |
-|--------|-------|
-| 200 | Success |
-| 201 | Created |
-| 204 | Deleted (no content) |
-| 400 | Bad request |
-| 404 | Not found |
-| 422 | Validation error |
-| 500 | Server error |
-| 503 | Service unavailable |
+| Status | Usage                |
+| ------ | -------------------- |
+| 200    | Success              |
+| 201    | Created              |
+| 204    | Deleted (no content) |
+| 400    | Bad request          |
+| 404    | Not found            |
+| 422    | Validation error     |
+| 500    | Server error         |
+| 503    | Service unavailable  |
 
 ### 18.3 Frontend Handling
 
@@ -1236,11 +1249,11 @@ if (error) {
 
 ### 19.1 Stack
 
-| Component | Tool | Purpose |
-|-----------|------|---------|
-| Metrics | Prometheus | Collection |
-| Visualization | Grafana | Dashboards |
-| Logs | Loki + Promtail | Aggregation |
+| Component     | Tool            | Purpose     |
+| ------------- | --------------- | ----------- |
+| Metrics       | Prometheus      | Collection  |
+| Visualization | Grafana         | Dashboards  |
+| Logs          | Loki + Promtail | Aggregation |
 
 ### 19.2 Key Metrics
 
@@ -1258,12 +1271,14 @@ histogram_quantile(0.95, rate(http_request_duration_seconds_bucket[5m]))
 ### 19.3 Grafana Dashboards
 
 **API Dashboard:**
+
 - Request rate (req/s)
 - Error rate (%)
 - Latency percentiles (p50, p95, p99)
 - Requests by endpoint
 
 **Logs Dashboard:**
+
 - Log volume over time
 - Error logs filter
 - Recent logs stream
@@ -1274,25 +1289,25 @@ histogram_quantile(0.95, rate(http_request_duration_seconds_bucket[5m]))
 
 ### 20.1 Validation Summary
 
-| Category | Status | Notes |
-|----------|--------|-------|
-| Completeness | ✅ PASS | All PRD requirements addressed |
-| Tech Stack | ✅ PASS | All components with versions |
-| Data Models | ✅ PASS | Full schema defined |
-| API Spec | ✅ PASS | OpenAPI 3.0 included |
-| Security | ✅ PASS | Non-root, secrets management |
-| Observability | ✅ PASS | Metrics + Logs defined |
-| CI/CD | ✅ PASS | GitHub Actions workflow |
-| Testing | ✅ PASS | Pyramid with examples |
+| Category      | Status  | Notes                          |
+| ------------- | ------- | ------------------------------ |
+| Completeness  | ✅ PASS | All PRD requirements addressed |
+| Tech Stack    | ✅ PASS | All components with versions   |
+| Data Models   | ✅ PASS | Full schema defined            |
+| API Spec      | ✅ PASS | OpenAPI 3.0 included           |
+| Security      | ✅ PASS | Non-root, secrets management   |
+| Observability | ✅ PASS | Metrics + Logs defined         |
+| CI/CD         | ✅ PASS | GitHub Actions workflow        |
+| Testing       | ✅ PASS | Pyramid with examples          |
 
 ### 20.2 Executive Summary
 
-| Metric | Value |
-|--------|-------|
-| **Architecture Completeness** | 95% |
-| **PRD Goal Coverage** | 100% (9/9) |
-| **Risk Level** | Low |
-| **Readiness** | **APPROVED** |
+| Metric                        | Value        |
+| ----------------------------- | ------------ |
+| **Architecture Completeness** | 95%          |
+| **PRD Goal Coverage**         | 100% (9/9)   |
+| **Risk Level**                | Low          |
+| **Readiness**                 | **APPROVED** |
 
 ### 20.3 Recommendations
 
@@ -1307,13 +1322,13 @@ histogram_quantile(0.95, rate(http_request_duration_seconds_bucket[5m]))
 
 ### Key URLs (Local Development)
 
-| Service | URL |
-|---------|-----|
-| Frontend | http://localhost:3000 |
-| API | http://localhost:8000 |
-| API Docs | http://localhost:8000/docs |
-| Prometheus | http://localhost:9090 |
-| Grafana | http://localhost:3001 |
+| Service    | URL                        |
+| ---------- | -------------------------- |
+| Frontend   | http://localhost:3000      |
+| API        | http://localhost:8000      |
+| API Docs   | http://localhost:8000/docs |
+| Prometheus | http://localhost:9090      |
+| Grafana    | http://localhost:3001      |
 
 ### Key Commands
 
@@ -1327,5 +1342,5 @@ make tf-apply         # Apply Terraform
 
 ---
 
-*Document generated by Architect Winston using BMAD-METHOD*
-*Validation Date: 2026-01-26*
+_Document generated by Architect Winston using BMAD-METHOD_
+_Validation Date: 2026-01-26_

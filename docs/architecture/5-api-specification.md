@@ -21,21 +21,21 @@ paths:
       tags: [Health]
       summary: Liveness probe
       responses:
-        '200':
+        "200":
           description: API is alive
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/HealthResponse'
+                $ref: "#/components/schemas/HealthResponse"
 
   /ready:
     get:
       tags: [Health]
       summary: Readiness probe
       responses:
-        '200':
+        "200":
           description: API is ready
-        '503':
+        "503":
           description: API is not ready
 
   /items:
@@ -54,12 +54,12 @@ paths:
             type: integer
             default: 0
       responses:
-        '200':
+        "200":
           description: List of items
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ItemListResponse'
+                $ref: "#/components/schemas/ItemListResponse"
 
     post:
       tags: [Items]
@@ -69,11 +69,11 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateItemRequest'
+              $ref: "#/components/schemas/CreateItemRequest"
       responses:
-        '201':
+        "201":
           description: Item created
-        '422':
+        "422":
           description: Validation error
 
   /items/{item_id}:
@@ -88,27 +88,27 @@ paths:
             type: string
             format: uuid
       responses:
-        '200':
+        "200":
           description: Item found
-        '404':
+        "404":
           description: Item not found
 
     put:
       tags: [Items]
       summary: Update an item
       responses:
-        '200':
+        "200":
           description: Item updated
-        '404':
+        "404":
           description: Item not found
 
     delete:
       tags: [Items]
       summary: Delete an item
       responses:
-        '204':
+        "204":
           description: Item deleted
-        '404':
+        "404":
           description: Item not found
 
   /metrics:
@@ -116,7 +116,7 @@ paths:
       tags: [Metrics]
       summary: Prometheus metrics (internal only)
       responses:
-        '200':
+        "200":
           description: Prometheus format metrics
 
 components:
@@ -164,23 +164,23 @@ components:
         items:
           type: array
           items:
-            $ref: '#/components/schemas/Item'
+            $ref: "#/components/schemas/Item"
         total:
           type: integer
 ```
 
 ## 5.2 API Endpoints Summary
 
-| Method | Path | Purpose | Auth |
-|--------|------|---------|------|
-| `GET` | `/health` | Liveness probe | No |
-| `GET` | `/ready` | Readiness probe | No |
-| `GET` | `/items` | List items | No |
-| `POST` | `/items` | Create item | No |
-| `GET` | `/items/{id}` | Get single item | No |
-| `PUT` | `/items/{id}` | Update item | No |
-| `DELETE` | `/items/{id}` | Delete item | No |
-| `GET` | `/metrics` | Prometheus metrics | No |
-| `GET` | `/docs` | Swagger UI | No |
+| Method   | Path          | Purpose            | Auth |
+| -------- | ------------- | ------------------ | ---- |
+| `GET`    | `/health`     | Liveness probe     | No   |
+| `GET`    | `/ready`      | Readiness probe    | No   |
+| `GET`    | `/items`      | List items         | No   |
+| `POST`   | `/items`      | Create item        | No   |
+| `GET`    | `/items/{id}` | Get single item    | No   |
+| `PUT`    | `/items/{id}` | Update item        | No   |
+| `DELETE` | `/items/{id}` | Delete item        | No   |
+| `GET`    | `/metrics`    | Prometheus metrics | No   |
+| `GET`    | `/docs`       | Swagger UI         | No   |
 
 ---
