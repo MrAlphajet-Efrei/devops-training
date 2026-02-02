@@ -9,7 +9,10 @@
       "Bash(python -m venv:*)",
       "Bash(.venvScriptsactivate)",
       "Bash(pip install:*)",
-      "Bash(npm install:*)"
+      "Bash(npm install:*)",
+      "Bash(make:*)",
+      "Bash(kubectl get:*)",
+      "Bash(docker port:*)"
     ]
   }
 }
