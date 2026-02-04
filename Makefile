@@ -1,6 +1,6 @@
 .DEFAULT_GOAL := help
 
-.PHONY: help setup-local dev test lint clean kind-create kind-delete kind-status
+.PHONY: help setup-local dev test lint clean kind-create kind-delete kind-status k8s-deploy k8s-delete k8s-status k8s-load-images k8s-port-forward
 
 ## help: Show this help message
 help:
@@ -57,3 +57,30 @@ kind-status:
 	@echo "=== Kubernetes Contexts ==="
 	@kubectl config get-contexts 2>/dev/null || echo "No Kubernetes contexts available"
 	@echo "=========================="
+
+k8s-deploy:
+	@echo "Deploying to Kind cluster..."
+	@kubectl apply -k infra/k8s/base/
+	@echo "Deployment complete."
+
+k8s-delete:
+	@echo "Deleting deployment from Kind cluster..."
+	@kubectl delete -k infra/k8s/base/ --ignore-not-found
+	@echo "Deletion complete."
+
+k8s-status:
+	@echo "=== Kubernetes Pods ==="
+	@kubectl get all -n devops-demo
+	@echo "======================="
+
+k8s-load-images:
+	@echo "Loading Docker images into Kind cluster..."
+	@kind load docker-image devops-frontend:0.1.0 --name devops-demo
+	@kind load docker-image devops-api:0.1.0 --name devops-demo
+	@echo "Images loaded."
+
+k8s-port-forward:
+	@echo "Port forwarding services..."
+	@kubectl port-forward svc/frontend 3000:3000 -n devops-demo &
+	@kubectl port-forward svc/api 8000:8000 -n devops-demo &
+	@echo "Port forwarding set up. Frontend: http://localhost:3000, API: http://localhost:8000"
